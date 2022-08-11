@@ -1,0 +1,61 @@
+name: deploy-prod
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'environment'
+        required: false
+        default: 'PROD'
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    environment: ${{ github.event.inputs.environment || 'PROD' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set up Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+#      - name: Test
+#        run: yarn test
+
+      - name: Production Dependencies
+        run: yarn --production
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: gCorePlus-User - Setup Package
+        env:
+          GCP_FUNCTION_VARIABLES: ${{ secrets.GCP_FUNC_VARS_ECOMMERCE }}
+        run: |
+          echo "$GCP_FUNCTION_VARIABLES" >> dist/apps/gcoreplus-user/.env.yml
+          sed -i 's/main.js/apps\/gcoreplus-user\/src\/main.js/g' dist/apps/gcoreplus-user/package.json
+#          echo "$GCP_FUNCTION_VARIABLES" >> dist/apps/gcoreplus-user/.env.yml
+#          cp package.json dist/apps/gcoreplus-user/package.json
+#          cp libs/common/src/main/main.google.js dist/apps/gcoreplus-user/main.google.js
+#          sed -i 's/main.js/main.google.js/g' dist/apps/gcoreplus-user/package.json
+
+      - name: gCorePlus-User - Deploy
+        uses: google-github-actions/deploy-cloud-functions@v0
+        with:
+          name: 'gcoreplus-user'
+          runtime: 'nodejs14'
+          entry_point: 'api'
+          region: 'southamerica-east1'
+          source_dir: 'dist/apps/gcoreplus-user'
+          env_vars_file: 'dist/apps/gcoreplus-user/.env.yml'

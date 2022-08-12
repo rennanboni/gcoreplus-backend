@@ -1,4 +1,4 @@
 export class UserCreateDto {
-  name: string;
-  price: number
+  firstName: string;
+  lastName: string;
 }

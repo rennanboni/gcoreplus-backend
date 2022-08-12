@@ -10,7 +10,7 @@ import { User } from '../entities';
 export class UserService extends TypeOrmCrudService<User> {
 
   constructor(
-    @InjectRepository(User, CONNECTION) repository: Repository<User>
+    @InjectRepository(User, CONNECTION) repository: Repository<User>,
   ) {
     super(repository);
   }

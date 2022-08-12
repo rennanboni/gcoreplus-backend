@@ -7,10 +7,10 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'Id' })
   id: number;
 
-  @Column('character varying', { name: 'FirstName', unique: true, length: 150 })
+  @Column('character varying', { name: 'FirstName', length: 150 })
   firstName: string;
 
-  @Column('character varying', { name: 'LastName', unique: true, length: 150 })
+  @Column('character varying', { name: 'LastName', length: 150 })
   lastName: string;
 
   @Column('timestamp without time zone', { name: 'CreatedAt', nullable: true, default: () => 'now()' })

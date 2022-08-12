@@ -1,2 +1,2 @@
-export const CONNECTION = 'ECOMMERCE_CONNECTION';
-export const SCHEMA = 'ecommerce';
+export const CONNECTION = 'GCOREPLUS_CONNECTION';
+export const SCHEMA = 'gcoreplus';

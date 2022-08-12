@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 
 import { UserController } from './controllers';
 import { UserService } from './services';
+import { GCorePlusUserDBModule } from './gcoreplus-user.db.module';
 
 @Module({
   controllers: [
@@ -35,7 +36,7 @@ import { UserService } from './services';
       })),
     }),
 
-    GCorePlusUserModule,
+    GCorePlusUserDBModule,
   ],
 })
 export class GCorePlusUserModule {}

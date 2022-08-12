@@ -19,4 +19,4 @@ import { User } from './entities';
     TypeOrmModule
   ]
 })
-export class GcoreplusUserModule {}
+export class GCorePlusUserDBModule {}
